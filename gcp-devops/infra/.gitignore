@@ -6,5 +6,3 @@
 .terraform.lock.hcl
 
 # Credentials
-creds/
-*.json
