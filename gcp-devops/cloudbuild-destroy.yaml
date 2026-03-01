@@ -1,0 +1,17 @@
+# Infra CI/CD (approval based)..............
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+steps:
+  - name: hashicorp/terraform:1.6
+    entrypoint: sh
+    dir: Terra_V1/gcp-devops/infra
+    args:
+      - -c
+      - |
+          set -e
+          echo "=== Terraform Init ==="
+          terraform init -reconfigure -input=false
+
+          echo "=== Terraform Destroy ==="
+          terraform destroy -auto-approve 
