@@ -1,33 +1,26 @@
-# Infra CI/CD (approval based)..............
+   
 options:
   logging: CLOUD_LOGGING_ONLY
 
+timeout: "30m"
+
 steps:
-  - name: hashicorp/terraform:1.6
-    entrypoint: sh
-    dir: gcp-devops/infra
-    args:
-      - -c
-      - terraform init
+- name: hashicorp/terraform:1.6
+  dir: gcp-devops/infra
+  entrypoint: terraform
+  args: ["init"]
 
+- name: hashicorp/terraform:1.6
+  dir: gcp-devops/infra
+  entrypoint: terraform
+  args: ["validate"]
 
-  - name: hashicorp/terraform:1.6
-    entrypoint: sh
-    dir: gcp-devops/infra
-    args:
-      - -c
-      - terraform validate
+- name: hashicorp/terraform:1.6
+  dir: gcp-devops/infra
+  entrypoint: terraform
+  args: ["plan", "-out=tfplan"]
 
-  - name: hashicorp/terraform:1.6
-    entrypoint: sh
-    dir: gcp-devops/infra
-    args:
-      - -c
-      - terraform plan
-
-  - name: hashicorp/terraform:1.6
-    entrypoint: sh
-    dir: gcp-devops/infra
-    args:
-      - -c
-      - terraform apply -auto-approve
+- name: hashicorp/terraform:1.6
+  dir: gcp-devops/infra
+  entrypoint: terraform
+  args: ["apply", "tfplan"]
