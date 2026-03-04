@@ -1,29 +1,35 @@
-#main.................
+# main
 resource "google_container_cluster" "gke" {
-    name = "prod-gke"
-    location = var.region
+  name     = "prod-gke"
+  location = var.region
 
-    remove_default_node_pool = true
-    initial_node_count = 1
+  remove_default_node_pool = true
+  google_container_node_pool       = 1
 
-    workload_identity_config {
-        workload_pool = "${var.project_id}.svc.id.goog"
-    }
-    deletion_protection = false
+  workload_identity_config {
+    workload_pool = "${var.project_id}.svc.id.goog"
+  }
+
+  deletion_protection = false
 }
 
-#resource....................
+# node pool
 resource "google_container_node_pool" "nodes" {
-    name = "primary-pool" 
-    cluster = google_container_cluster.gke.name
-    location = var.region 
+  name     = "primary-pool"
+  cluster  = google_container_cluster.gke.name
+  location = var.region
 
-    node_config {
-        machine_type = "e2-standard-4"
-        oauth_scopes = ["https://www.googleapi.com/auth/cloud-platform"]
-        shielded_instance_config {
-            enable_secure_boot = true
-        }
+  node_count = 3
+
+  node_config {
+    machine_type = "e2-standard-4"
+
+    oauth_scopes = [
+      "https://www.googleapis.com/auth/cloud-platform"
+    ]
+
+    shielded_instance_config {
+      enable_secure_boot = true
     }
-    initial_node_count = 3
+  }
 }
