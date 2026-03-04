@@ -21,6 +21,8 @@ resource "google_container_node_pool" "nodes" {
 
   node_config {
     machine_type = "e2-medium"
+    disk_size_gb    = 40      # Add this line
+    disk_type       = "pd-standard"   # Use standard disks instead of SSD to save SSD quota
 
     # FIXED: Using your specific project's default compute service account
     service_account = "648980925301-compute@developer.gserviceaccount.com"
