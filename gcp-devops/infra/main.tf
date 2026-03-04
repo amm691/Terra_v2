@@ -4,7 +4,7 @@ resource "google_container_cluster" "gke" {
   location = var.region
 
   remove_default_node_pool = true
-  google_container_node_pool       = 1
+  initial_node_count = 1
 
   workload_identity_config {
     workload_pool = "${var.project_id}.svc.id.goog"
