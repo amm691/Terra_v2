@@ -12,19 +12,18 @@ resource "google_container_cluster" "gke" {
 
   deletion_protection = false
 }
-
 # node pool
 resource "google_container_node_pool" "nodes" {
-  name     = "primary-pool"
-  cluster  = google_container_cluster.gke.name
-  location = var.region
-
-  # CHANGED: Reduced to 2 nodes to fit within CPU quota
+  name       = "primary-pool"
+  cluster    = google_container_cluster.gke.name
+  location   = var.region
   node_count = 2
 
   node_config {
-    # CHANGED: Switched to e2-medium (2 vCPU, 4GB RAM)
     machine_type = "e2-medium"
+
+    # FIXED: Using your specific project's default compute service account
+    service_account = "648980925301-compute@developer.gserviceaccount.com"
 
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
