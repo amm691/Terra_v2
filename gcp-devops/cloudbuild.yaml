@@ -2,7 +2,7 @@
 options:
   logging: CLOUD_LOGGING_ONLY
 
-timeout: "30m"
+timeout: "60m"
 
 steps:
 - name: hashicorp/terraform:1.6
